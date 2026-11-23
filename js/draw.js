@@ -45,15 +45,15 @@ export function palette(sp, o = {}) {
 
 // Fill (and optionally outline) a list of parts. look: { pal, stroke (css) , lw (px), alpha: { tone: a }, fill(tone, part) → css | null }
 export function drawParts(ctx, parts, T, look = {}) {
-  const pal = look.pal || {}, lw = look.lw ?? 0;
+  const pal = look.pal || {}, lw = look.lw ?? 0, base = ctx.globalAlpha;     // the caller's globalAlpha fades the whole thing
   ctx.lineJoin = ctx.lineCap = 'round';
   for (const q of parts) {
     const col = look.fill ? look.fill(q.t, q) : pal[q.t];
     if (col == null && !look.stroke) continue;
     const a = look.alpha?.[q.t] ?? (q.k === 'mark' && q.t === 'mark' ? 0.55 : 1);
     ctx.beginPath(); trace(ctx, q, T);
-    if (q.l) { ctx.strokeStyle = col || look.stroke; ctx.lineWidth = Math.max(0.6, q.w * T.k); ctx.globalAlpha = a; ctx.stroke(); ctx.globalAlpha = 1; continue; }
-    if (col != null) { ctx.fillStyle = col; if (a < 1) ctx.globalAlpha = a; ctx.fill(); ctx.globalAlpha = 1; }
+    if (q.l) { ctx.strokeStyle = col || look.stroke; ctx.lineWidth = Math.max(0.6, q.w * T.k); ctx.globalAlpha = a * base; ctx.stroke(); ctx.globalAlpha = base; continue; }
+    if (col != null) { ctx.fillStyle = col; if (a < 1) ctx.globalAlpha = a * base; ctx.fill(); ctx.globalAlpha = base; }
     if (look.stroke && lw > 0 && q.k !== 'mark' && q.k !== 'belly') { ctx.strokeStyle = look.stroke; ctx.lineWidth = lw; ctx.stroke(); }
     if (q.k === 'eye' && look.pupil !== false) { const r = Math.max(0.4, q.c[2] * T.k * 0.5); ctx.beginPath(); ctx.arc(T.x + q.c[0] * T.k * T.dir, T.y - q.c[1] * T.k, r, 0, 6.2832); ctx.fillStyle = look.pupilCol || '#14110c'; ctx.fill(); }
   }

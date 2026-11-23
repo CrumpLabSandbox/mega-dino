@@ -337,7 +337,7 @@ function headParts(q, out, bone) {
   if (Hd.beak && !bone) out.push({ k: 'beak', t: 'horn', p: mp(Hd.beak), s: 1 });
   if (f.crest && CRESTS[f.crest]) out.push({ k: 'crest', t: f.crest === 'horns' || f.crest === 'brow' || f.crest === 'nose' ? horn : acc, p: mp(CRESTS[f.crest]), s: 1 });
   if (f.crest === 'dome') for (const [x, y] of [[-.03, .3], [.02, .2], [.7, .3], [.84, .22]]) out.push({ k: 'horn', t: horn, c: [...M(x, y), q.head.len * 0.035] });
-  if (f.horns) out.push({ k: 'horn', t: horn, p: mp([[.34, .42], [.56, .8 * f.horns + .1], [1.0, 1.02 * f.horns + .08], [.72, .66 * f.horns + .1], [.52, .44]]), s: 1 });
+  if (f.horns) out.push({ k: 'horn', t: horn, p: mp([[.34, .42], [.56, .8 * f.horns + .1], [1.0, 1.02 * f.horns + .08], [.72, .66 * f.horns + .1], [.52, .44]]) });
   if (f.noseHorn) out.push({ k: 'horn', t: horn, p: mp([[.7, .35], [.8, .34 + .42 * f.noseHorn], [.87, .25]]) });
   if (P.headT === 'anky') out.push({ k: 'horn', t: horn, p: mp([[0, .3], [-.14, .44], [.12, .38]]) }, { k: 'horn', t: horn, p: mp([[.04, -.08], [-.1, -.2], [.16, -.1]]) });
   const e = Hd.eye, er = e[2] * q.head.len * (1 + q.young * 0.6) * (P.hd || 1);

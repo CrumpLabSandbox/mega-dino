@@ -27,7 +27,8 @@ export const BIOMES = {
   uplands: { hills: 1, water: 0, density: 0.5, tall: 0.5, far: 'mountains', ground: ['#8c9262', '#5a6840'], mult: { conifer: 1.5, rock: 3 } },
 };
 const TALL_NICHE = new Set(['brachiosaur', 'camarasaur', 'therizino']);     // plans that browse up in the trees
-const STANDS = new Set(['horned', 'plated']);                               // prey that face a predator down
+const STANDS = new Set(['horned', 'plated']);
+const BULKY = new Set(['bush', 'cycad', 'boulder', 'log', 'stump', 'bones']);                               // prey that face a predator down
 
 let nextId = 1;
 export function createWorld(o = {}) {
@@ -55,7 +56,7 @@ export function createWorld(o = {}) {
   }
   // who should be on stage at this moment of deep time: [{ key, sp, role, young, group }]
   function roster(E, herd) {
-    const mult = lerp(0.45, 2.1, herd), out = [];
+    const mult = herd < 0.5 ? lerp(0.4, 1, herd * 2) : lerp(1, 2.2, herd * 2 - 1), out = [];     // the middle gives exactly the scene's numbers
     const put = (g, sp, n, young, role, lane) => {
       if (!sp) return;
       const N = Math.max(1, Math.round(n * (n > 1 ? mult : 1) * (n === 1 && herd > 0.85 && role !== 'pred' ? 2 : 1)));
@@ -84,12 +85,12 @@ export function createWorld(o = {}) {
       headTo: 0, jaw: 0, crouch: 0, rear: 0, wHead: 0, wJaw: 0, wCrouch: 0, wRear: 0, fade: instant ? 1 : 0, leaving: false, steps: 0,
       ox: 0, lane: 0, seed: R() };
     const spread = Math.max(sp.len * 1.3, hw * (mode === 'migrate' ? 0.7 : 0.8));
-    a.ox = (R() - 0.5) * 2 * spread * (want.role === 'young' ? 0.6 : 1);
+    a.ox = (R() - 0.5) * 2 * spread * (want.role === 'young' ? 0.6 : want.i ? 1 : 0.25);     // the first of each group stays near the middle
     a.lane = d0 * (want.lane ?? lerp(0.92, mode === 'nest' ? 1.4 : 1.7, R() * R() * (want.i ? 1 : 0.3)));
     if (want.role === 'pred') a.lane = d0 * lerp(1.0, 1.25, R());
     a.d = a.lane;
     a.x = instant ? G.anchor + a.ox : W.cam.x - a.dir * (hw * (a.d / d0) + sp.len * 1.5 + R() * hw * 0.5);
-    if (mode === 'hunt' && want.role === 'pred' && instant) a.x = G.anchor - hw * 0.75;
+    if (mode === 'hunt' && want.role === 'pred' && instant) a.x = G.anchor - hw * 0.75 - (want.i || 0) * sp.len * 1.1;
     a.tx = a.x;
     W.actors.push(a);
   }
@@ -181,7 +182,8 @@ export function createWorld(o = {}) {
       if (H.timer <= 0) { H.phase = 'tired'; H.timer = 7; }
     } else if (H.phase === 'standoff') {
       all(prey, (a, i) => { a.busy = 1; a.tx = a.x; a.dir = -away; a.idle = a.role === 'young' ? 'rest' : 'guard'; if (a.role === 'young' && a.parent) a.tx = a.parent.x + away * a.parent.sp.len * 0.4; });
-      all(preds, (a, i) => { a.tx = qx - away * (big * 1.4 + (0.5 + 0.5 * Math.sin(H.timer * 0.9 + i)) * big * 1.2 + i * big * 0.6); a.hurry = 0.25; a.idle = H.timer % 3 < 1.2 ? 'call' : 'look'; });
+      all(preds, (a, i) => { a.tx = qx - away * (big * 1.4 + (0.5 + 0.5 * Math.sin(H.timer * 0.9 + i)) * big * 1.2 + i * big * 0.6); a.hurry = 0.25; a.idle = H.timer % 3 < 1.2 ? 'call' : 'look';
+        if (Math.sign(a.tx - a.x) !== away || Math.abs(a.tx - a.x) < a.sp.len * 0.4) { a.tx = a.x; if (!a.turn) a.dir = away; } });     // never turn its back on the horns
       if (H.timer <= 0) { H.phase = 'tired'; H.timer = 6; }
     } else if (H.phase === 'tired') {
       all(preds, a => { a.tx = a.x; a.hurry = 0; a.idle = 'call'; });
@@ -219,18 +221,17 @@ export function createWorld(o = {}) {
     const zoom = Math.pow(2, (p.scale - 0.5) * 2);
     const jump = Math.abs(f.stage - W.lastStage) > 0.03 || f.epoch !== W.lastEpoch || W.lastStage < -1 || Math.abs((W.lastHerd ?? p.herd) - p.herd) > 0.2;
     // frame the cast: tall enough for the tallest, wide enough for the longest
-    let tall = 2, long = 2; for (const a of W.actors) if (!a.leaving) { const s = size(a.sp); tall = Math.max(tall, s.tall * a.scale); long = Math.max(long, a.sp.len * a.scale); }
-    const fit = Math.max(tall * 2.15, long * (h / w) / 0.62, 2.2) * (o.frame ?? 1);
-    W.viewM = W.viewM && !jump ? W.viewM + (fit - W.viewM) * Math.min(1, dt * 0.5) : fit;
+    const fitOf = () => { let tall = 1, long = 1.2; for (const a of W.actors) if (!a.leaving) { const s = size(a.sp); tall = Math.max(tall, s.tall * a.scale); long = Math.max(long, a.sp.len * a.scale); }
+      return Math.max(tall * 2.15, long * (h / w) / 0.62, 1.6) * (o.frame ?? 1); };
+    if (jump) {       // rebuild the cast first (spread over a view guessed from the unit), then frame what is there
+      reconcile(E, p.herd, true, w / h * (W.viewM || U * 1.2) / zoom / 2);
+      if (W.lastStage < -1) W.cam.x = 0;
+      W.viewM = fitOf();
+    } else { const fit = fitOf(); W.viewM += (fit - W.viewM) * Math.min(1, dt * 0.5); }
     const viewM = W.viewM / zoom, k0 = h / viewM;
     const horizon = h * (o.horizon ?? 0.56), foot = h * (o.foot ?? 0.85), ch = (foot - horizon) / k0;
     const kd = d => k0 * d0 / d, hw = w / 2 / k0;
-    if (jump) { reconcile(E, p.herd, true, hw); if (W.lastStage < -1) W.cam.x = 0; }
-    else if (fract(f.t * 0.7) < dt * 0.7 + 0.02) reconcile(E, p.herd, false, hw);
-    if (jump && W.viewM === fit && W.actors.length) {     // the first roster changes the framing: settle it at once
-      let t2 = 2, l2 = 2; for (const a of W.actors) { const s = size(a.sp); t2 = Math.max(t2, s.tall * a.scale); l2 = Math.max(l2, a.sp.len * a.scale); }
-      W.viewM = Math.max(t2 * 2.15, l2 * (h / w) / 0.62, 2.2) * (o.frame ?? 1);
-    }
+    if (!jump && fract(f.t * 0.7) < dt * 0.7 + 0.02) reconcile(E, p.herd, false, hw);
     W.lastStage = f.stage; W.lastEpoch = f.epoch; W.lastHerd = p.herd;
     if (mode === 'nest' && !W.nests) { W.nests = []; const n = o.nests || 3; for (let i = 0; i < n; i++) W.nests.push({ x: (i - (n - 1) / 2) * U * 1.5 + (R() - 0.5) * U * 0.4, d: d0 * (1.05 + 0.25 * (i % 2) + R() * 0.1), seed: i + 1 }); }
     // clicks: the nearest animal calls, the rest look up
@@ -245,7 +246,8 @@ export function createWorld(o = {}) {
     // camera
     const live = W.actors.filter(a => !a.leaving && a.role !== 'young');
     let focus = W.cam.x;
-    if (o.cam === 'still' || ((mode === 'wander' || mode === 'nest') && o.cam !== 'follow')) focus = (W.groups.find(Boolean)?.home ?? 0) + (o.pan || 0) * f.t;
+    if (o.cam === 'still' || ((mode === 'wander' || mode === 'nest') && o.cam !== 'follow')) { const home = (W.groups.find(Boolean)?.home ?? 0) + (o.pan || 0) * f.t;
+      focus = live.length && !o.pan ? home + clamp((live.reduce((s, a) => s + a.x, 0) / live.length - home) * 0.7, -hw * 0.6, hw * 0.6) : home; }
     else if (mode === 'hunt' && live.length) { const pr = live.filter(a => a.role === 'pred'), py = live.filter(a => a.role !== 'pred'), m = l => l.reduce((s, a) => s + a.x, 0) / (l.length || 1);
       focus = pr.length && py.length ? (m(pr) + m(py)) / 2 : m(live); }
     else if (live.length) { const G = W.groups[live[0].group]; focus = (G?.anchor ?? live[0].x) + (G?.dir ?? 1) * hw * 0.12; }
@@ -280,8 +282,8 @@ export function createWorld(o = {}) {
         if (dd < d0 * 0.86 && Math.abs(sx(x, dd) - w / 2) < w * 0.16 && hash(c, r, seed + 5) < 0.6) continue;   // keep the middle of the foreground open
         let kind;
         if (wl && y < 0) { if (y < -U * 0.05 || !fw.reed && !fw.horsetail) continue; kind = fw.reed ? 'reed' : 'horsetail'; }
-        else kind = dd > d0 * 1.15 && tallK.length && hash(c, r, seed + 3) < biome.tall ? pickK(tallK, hash(c, r, seed + 4)) : lowK.length ? pickK(lowK, hash(c, r, seed + 4)) : null;
-        if (!kind) continue;
+        else kind = dd > d0 * 1.4 && tallK.length && hash(c, r, seed + 3) < biome.tall ? pickK(tallK, hash(c, r, seed + 4)) : lowK.length ? pickK(lowK, hash(c, r, seed + 4)) : null;
+        if (!kind || (dd < d0 * 0.95 && BULKY.has(kind))) continue;      // nothing bulky in front of the animals
         const sd = (c * 7919 + r * 104729 + seed) | 0, sway = wxs * (0.35 + 0.65 * Math.sin(f.t * 1.3 + x * 0.21 + r));
         items.push({ type: 'plant', kind, seed: sd, wx: x, d: dd, x: sx(x, dd), y: sy(x, dd, wl ? Math.max(y, 0) : y), k: kd(dd), sway, fog: fogOf(dd),
           get parts() { return this._p ||= plantParts(kind, sd, sway); } });
@@ -329,13 +331,14 @@ export function createWorld(o = {}) {
       meteor = { x, y, r: h * lerp(0.008, 0.03, m), ang: Math.atan2(horizon + h * 0.05, w * 0.66), len: h * lerp(0.25, 0.7, m), hit: E.meteor >= 1, glowX: w * 0.74 }; }
 
     // ---- what stands on the horizon
+    let farBottom = horizon + 2; for (const q of bands[0].pts) farBottom = Math.max(farBottom, q[1] + 2);     // down to the first ground band: no gap
     const far = [], ridge = (kind, par, amp2, base, tone, fr) => {
       const pts = []; for (let c = -1; c <= 49; c++) { const px = c / 48 * w, u = px / h * fr + camX / U * par + seed * 5.7 + tone * 31;
         let n = fbm2(u, tone * 9.1, 4);
         if (kind === 'mountains') n = 1 - Math.abs(2 * n - 1) * 1.6 + 0.3 * noise2(u * 6, 2); else if (kind === 'mesas') n = Math.round(n * 3.2) / 3.2 * 0.8 + 0.08 * noise2(u * 9, 1);
         else if (kind === 'forest') n = 0.45 + 0.35 * n + 0.1 * Math.abs(Math.sin(u * 37 + tone)) + 0.05 * Math.abs(Math.sin(u * 91));
         pts.push([px, horizon - h * (base + amp2 * clamp(n))]); }
-      far.push({ kind, pts, tone, bottom: horizon + 2 });
+      far.push({ kind, pts, tone, bottom: farBottom });
     };
     if (biome.far === 'mountains') { ridge('mountains', 0.02, 0.26, 0.02, 0, 1.3); ridge('hills', 0.05, 0.1, 0, 1, 2.2); }
     else if (biome.far === 'mesas') { ridge('mesas', 0.02, 0.2, 0.01, 0, 1.2); ridge('mesas', 0.05, 0.1, 0, 1, 2.5); }
@@ -351,7 +354,7 @@ export function createWorld(o = {}) {
       f.sig.count = clamp(items.filter(i => i.type === 'dino').length / 16);
     }
     W.roar = 0;
-    return W.view = { w, h, horizon, k0, viewM, camX, sx, sy, layers: bands, far, sea, flyers, sun, meteor, flash: E.flash, dark: E.dark, light, day: dl,
+    return W.view = { w, h, horizon, k0, d0, viewM, camX, sx, sy, layers: bands, far, sea, flyers, sun, meteor, flash: E.flash, dark: E.dark, light, day: dl,
       biome, actors: W.actors, items, lead, wind: wxs, hunt: mode === 'hunt' ? W.hunt.phase : null };
   };
   return W;

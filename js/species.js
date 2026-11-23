@@ -105,15 +105,15 @@ const RAW = [
   S('massospondylus', 'Massospondylus', 'prosauropod', 4, [200, 183], { niche: 'browser', diet: 'herbivore', mass: 500, where: 'South Africa, Zimbabwe', means: 'longer vertebra',
     c: ['#8a8250', '#d8d2a4', '#5c5630', '#a85a36'], pat: 'bands', o: { r: .055, neck: .22 },
     fact: 'Its nests are among the oldest dinosaur nests known, with eggs that still hold embryos.' }),
-  S('megalosaurus', 'Megalosaurus', 'theropod', 9, [167, 165], { niche: 'apex', diet: 'carnivore', mass: 1400, where: 'England', means: 'great lizard',
+  S('megalosaurus', 'Megalosaurus', 'theropod', 7, [167, 165], { niche: 'apex', diet: 'carnivore', mass: 1000, where: 'England', means: 'great lizard',
     c: ['#5e5a44', '#c4bc94', '#35321f', '#8f4a2c'], pat: 'saddle', o: { arm: [.05, .045, .03] },
     fact: 'The first dinosaur ever named, in 1824, eighteen years before the word “dinosaur” existed.' }),
   S('shunosaurus', 'Shunosaurus', 'camarasaur', 9.5, [170, 160], { niche: 'giant', diet: 'herbivore', mass: 3000, where: 'Sichuan, China', means: 'Shu lizard',
     c: ['#7a7a5a', '#cfcda8', '#4c4c34', '#a0683a'], pat: 'saddle', f: { club: .5 }, o: { neck: .2, tail: .45 },
     fact: 'A short-necked sauropod with a spiked club at the end of its tail.' }),
-  S('huayangosaurus', 'Huayangosaurus', 'stegosaur', 4.5, [168, 163], { niche: 'plated', diet: 'herbivore', mass: 500, where: 'Sichuan, China', means: 'Huayang lizard',
+  S('huayangosaurus', 'Huayangosaurus', 'stegosaur', 4, [168, 163], { niche: 'plated', diet: 'herbivore', mass: 500, where: 'Sichuan, China', means: 'Huayang lizard',
     c: ['#6a6048', '#c6bb96', '#3c3424', '#b5552e'], pat: 'plain', f: { plates: .6, spikes: 1, sideSpike: 1 }, o: { pitch: -.15, hipH: .3 },
-    fact: 'An early stegosaur with narrow, spiky plates and a spike on each shoulder.' }),
+    fact: 'An early stegosaur with narrow, spiky plates; it is usually restored with a spike on each shoulder.' }),
   // Late Jurassic
   S('allosaurus', 'Allosaurus', 'theropod', 9, [155, 145], { niche: 'apex', diet: 'carnivore', mass: 2000, where: 'western USA, Portugal', means: 'different lizard',
     c: ['#6b5438', '#d2c097', '#3a2a18', '#b33d26'], pat: 'stripes', f: { crest: 'brow' }, o: { arm: [.055, .05, .035], head: .115 },
@@ -123,10 +123,10 @@ const RAW = [
     fact: 'The four tail spikes are called a thagomizer, a name that started as a joke in a Gary Larson cartoon. An Allosaurus bone has a hole that fits one.' }),
   S('diplodocus', 'Diplodocus', 'sauropod', 26, [154, 152], { niche: 'giant', diet: 'herbivore', mass: 14000, where: 'western USA', means: 'double beam',
     c: ['#7b7458', '#cdc7a6', '#4f4a36', '#8f7a4a'], pat: 'saddle', f: { spines: 1 },
-    fact: 'Half of its length was tail, which ended in a whip that may have cracked faster than sound.' }),
+    fact: 'Half of its length was tail, which ended in a whip. It was once thought to crack faster than sound; a 2022 study says it was fast, but not that fast.' }),
   S('apatosaurus', 'Apatosaurus', 'sauropod', 22, [152, 151], { niche: 'giant', diet: 'herbivore', mass: 20000, where: 'western USA', means: 'deceptive lizard',
     c: ['#6a6a5c', '#c6c6b2', '#44443a', '#7a8a6a'], pat: 'plain', o: { r: .064, rHip: .06, rSh: .056, rNeck: [.042, .02], neck: .25, hipH: .165, legR: [.18, .13, .11, .12] },
-    fact: 'The animal long known as “Brontosaurus”. Its neck was as thick as a tree trunk and may have been used in fights.' }),
+    fact: 'For a century “Brontosaurus” was counted as Apatosaurus; a 2015 study split them again and the argument goes on. Its neck was as thick as a tree trunk and may have been used in fights.' }),
   S('brachiosaurus', 'Brachiosaurus', 'brachiosaur', 22, [154, 150], { niche: 'giant', diet: 'herbivore', mass: 40000, where: 'western USA', means: 'arm lizard',
     c: ['#75705a', '#cfcab0', '#4a4636', '#a07a52'], pat: 'saddle',
     fact: 'Its front legs were longer than its back legs, so its back sloped up like a giraffe’s and it could browse 12 m off the ground.' }),
@@ -152,7 +152,7 @@ const RAW = [
   S('iguanodon', 'Iguanodon', 'iguanodont', 10, [126, 122], { niche: 'browser', diet: 'herbivore', mass: 4000, where: 'Belgium, England', means: 'iguana tooth',
     c: ['#5f7048', '#c9d0a0', '#3a472a', '#9a7a3a'], pat: 'saddle', f: { thumb: 1 },
     fact: 'The second dinosaur ever named. Its thumb spike was first reconstructed as a horn on its nose.' }),
-  S('utahraptor', 'Utahraptor', 'raptor', 6, [135, 130], { niche: 'pack', diet: 'carnivore', mass: 400, where: 'Utah, USA', means: 'Utah’s predator',
+  S('utahraptor', 'Utahraptor', 'raptor', 6, [139, 135], { niche: 'pack', diet: 'carnivore', mass: 400, where: 'Utah, USA', means: 'Utah’s predator',
     c: ['#5c4a36', '#d0bf9c', '#30241a', '#c2452a'], pat: 'bands', f: { sickle: 1.3, wings: .7, tailFan: .6, fuzz: 1 }, o: { r: .075, rHip: .072, top: 11, legR: [.2, .085, .045, .04] },
     fact: 'The largest raptor known, as heavy as a polar bear, with a 24 cm sickle claw on each foot.' }),
   S('deinonychus', 'Deinonychus', 'raptor', 3.4, [115, 108], { niche: 'pack', diet: 'carnivore', mass: 75, where: 'Montana and Oklahoma, USA', means: 'terrible claw',
@@ -197,7 +197,7 @@ const RAW = [
     fact: 'A little longer than T. rex, with a lighter skull and teeth like knives for slicing at giant sauropods.' }),
   S('argentinosaurus', 'Argentinosaurus', 'titanosaur', 33, [96, 92], { niche: 'giant', diet: 'herbivore', mass: 70000, where: 'Argentina', means: 'Argentine lizard',
     c: ['#746a56', '#cfc6ac', '#4a4234', '#9a7250'], pat: 'saddle',
-    fact: 'Among the heaviest land animals ever: about 70 tonnes, as much as ten elephants. It hatched from an egg the size of a melon.' }),
+    fact: 'Among the heaviest land animals ever: about 70 tonnes, as much as ten elephants. Its eggs were probably no bigger than a melon, judging by other titanosaurs.' }),
   S('tyrannosaurus', 'Tyrannosaurus rex', 'theropod', 12.3, [68, 66], { niche: 'apex', diet: 'carnivore', mass: 8400, where: 'western North America', means: 'tyrant lizard king',
     c: ['#6a5a3c', '#cdbb90', '#3a2e1a', '#b5452f'], pat: 'saddle', o: { head: .135, hd: 1.12, r: .09, rHip: .088, legR: [.22, .09, .05, .045] },
     fact: 'It had the strongest bite of any land animal, enough to crush bone, and teeth the size of bananas. Its arms were short but strong.' }),
@@ -206,13 +206,13 @@ const RAW = [
     fact: 'Its skull could be 2.5 m long. Healed bite marks on frills and horns show it survived fights with T. rex.' }),
   S('ankylosaurus', 'Ankylosaurus', 'ankylosaur', 7, [68, 66], { niche: 'plated', diet: 'herbivore', mass: 6000, where: 'western North America', means: 'fused lizard',
     c: ['#6e5e44', '#cabb98', '#403423', '#a08a5a'], pat: 'plain', f: { scutes: 1, club: 1 },
-    fact: 'Armoured down to its eyelids. The club on its tail could swing hard enough to break a tyrannosaur’s leg.' }),
+    fact: 'Armoured all over, even on its skull. The club on its tail could swing hard enough to break a tyrannosaur’s leg.' }),
   S('edmontosaurus', 'Edmontosaurus', 'iguanodont', 11, [73, 66], { niche: 'browser', diet: 'herbivore', mass: 4500, where: 'western North America', means: 'Edmonton lizard',
     c: ['#687248', '#cdd2a2', '#414a2a', '#b08a3e'], pat: 'bands', f: { crest: 'comb' }, o: { head: .1 },
     fact: '“Mummies” with skin show a soft comb on its head, like a rooster’s, and hooves on its front feet.' }),
   S('parasaurolophus', 'Parasaurolophus', 'iguanodont', 9.5, [76.5, 73], { niche: 'browser', diet: 'herbivore', mass: 2500, where: 'western North America', means: 'near crested lizard',
     c: ['#5a7a5a', '#cfd8a8', '#36503a', '#d1582c'], pat: 'stripes', f: { crest: 'tube' }, o: { head: .1 },
-    fact: 'The hollow crest, up to 1.8 m long, was a trombone: air from the nose looped through it to make deep calls.' }),
+    fact: 'The hollow crest (skull and crest together were about 1.6 m long) was a trombone: air from the nose looped through it to make deep calls.' }),
   S('corythosaurus', 'Corythosaurus', 'iguanodont', 9, [77, 75.7], { niche: 'browser', diet: 'herbivore', mass: 3000, where: 'Alberta, Canada', means: 'helmet lizard',
     c: ['#6a6a3e', '#d6d09a', '#44441f', '#3f7a9a'], pat: 'spots', f: { crest: 'helmet' }, o: { head: .1 },
     fact: 'A duck-bill with a hollow crest shaped like a helmet, which worked as a horn for calling.' }),
@@ -239,7 +239,7 @@ const RAW = [
     fact: 'A plant-eating theropod with a pot belly and the longest claws of any known animal, each about as long as a sword.' }),
   S('oviraptor', 'Oviraptor', 'raptor', 1.6, [75, 71], { niche: 'tiny', diet: 'omnivore', mass: 35, where: 'Mongolia', means: 'egg seizer',
     c: ['#8a5a3a', '#e0c8a0', '#553420', '#3f8a9a'], pat: 'saddle', f: { crest: 'casque', wings: 1, tailFan: 1, fuzz: 1 }, o: { tail: .34, head: .09, headT: 'bird', neck: .16, top: 10 },
-    fact: 'Named a thief because it lay on a nest of eggs. They were its own: it died brooding them like a bird.' }),
+    fact: 'Named a thief because it lay on a nest of eggs. They were almost certainly its own: its relatives have been found brooding nests like birds.' }),
   S('carnotaurus', 'Carnotaurus', 'theropod', 8, [72, 69], { niche: 'hunter', diet: 'carnivore', mass: 1400, where: 'Argentina', means: 'meat-eating bull',
     c: ['#8a4a34', '#dcbf9a', '#4f261a', '#d98a2e'], pat: 'spots', f: { crest: 'horns' }, o: { head: .09, hd: 1.25, arm: [.015, .012, .008], r: .07, top: 13, leg: [.38, .44, .32] },
     fact: 'Bull horns over the eyes, arms even smaller than T. rex’s, and a tail built for sprinting.' }),
@@ -262,9 +262,9 @@ const RAW = [
   S('gastornis', 'Gastornis', 'bird', 1.9, [56, 45], { niche: 'apex', diet: 'herbivore', mass: 175, where: 'Europe, North America, China', means: 'Gaston’s bird',
     c: ['#5a4a3a', '#cfc0a4', '#33281e', '#d19a2e'], pat: 'plain', f: { fuzz: 1, wingFold: .7 }, o: { head: .22, hd: 1.25, r: .2, rHip: .18, rSh: .16, hipH: .42, torso: .4, neck: .18, rNeck: [.09, .07], legR: [.2, .08, .05, .045] },
     fact: 'A flightless bird two metres tall with a huge beak. It most likely cracked nuts and seeds, not bones.' }),
-  S('presbyornis', 'Presbyornis', 'bird', 0.9, [62, 55], { niche: 'bird', diet: 'filter feeder', mass: 2, where: 'North America', means: 'elder bird',
-    c: ['#6a5a4a', '#e6e0d0', '#3a3028', '#c8742e'], pat: 'plain', f: { fuzz: 1, wingFold: 1, tailFan: .5 }, o: { hipH: .62, neck: .3, head: .13, hd: .7, r: .13, leg: [.26, .46, .4], legR: [.12, .04, .025, .02], headT: 'duck', top: 6 },
-    fact: 'A duck’s head on a flamingo’s legs. It waded in great flocks on lake shores a few million years after the impact.' }),
+  S('presbyornis', 'Presbyornis', 'bird', 0.9, [62, 50], { span: 1.2, niche: 'bird', diet: 'filter feeder', mass: 2, where: 'North America', means: 'elder bird',
+    c: ['#6a5a4a', '#e6e0d0', '#3a3028', '#c8742e'], pat: 'plain', f: { fuzz: .35, wingFold: 1, tailFan: .5 }, o: { hipH: .62, neck: .3, head: .13, hd: .7, r: .13, leg: [.26, .46, .4], legR: [.12, .04, .025, .02], headT: 'duck', top: 6 },
+    fact: 'A duck’s head on a flamingo’s legs. It waded in great flocks on lake shores about 10–15 million years after the impact.' }),
 ];
 
 const F = (id, name, plan, span, ma, rest) => ({ id, name, plan, len: span, span, ma, kind: 'fly', ...rest });
@@ -290,37 +290,37 @@ const FLY = [
   F('quetzalcoatlus', 'Quetzalcoatlus', 'ptero', 10.5, [68, 66], { where: 'Texas, USA', means: 'feathered serpent god', diet: 'carnivore', mass: 220,
     c: ['#6a5a4a', '#dcd2c0', '#3a3028', '#c9452e'], crest: .5, o: { head: 1.7, neck: 1.9 },
     fact: 'The largest flying animal known: wings as wide as a small plane and, standing, as tall as a giraffe.' }),
-  F('ichthyornis', 'Ichthyornis', 'pbird', 0.6, [95, 83.5], { where: 'Kansas, USA', means: 'fish bird', diet: 'fish eater', mass: 0.3,
+  F('ichthyornis', 'Ichthyornis', 'pbird', 0.45, [95, 83.5], { where: 'Kansas, USA', means: 'fish bird', diet: 'fish eater', mass: 0.3,
     c: ['#5a5a5e', '#eeeeee', '#2e2e33', '#d19a2e'], o: {},
     fact: 'A tern-like seabird that could fly as well as any modern bird, but still had teeth in its beak.' }),
 ];
 
 const W = (id, name, plan, len, ma, rest) => ({ id, name, plan, len, ma, kind: 'swim', ...rest });
 const SWIM = [
-  W('shonisaurus', 'Shonisaurus', 'ichthyo', 15, [222, 212], { where: 'Nevada, USA', means: 'Shoshone mountain lizard', diet: 'carnivore', mass: 30000,
+  W('shonisaurus', 'Shonisaurus', 'ichthyo', 15, [230, 224], { niche: 'giant', where: 'Nevada, USA', means: 'Shoshone mountain lizard', diet: 'carnivore', mass: 30000,
     c: ['#3a4a5a', '#c8d2d8', '#22303c', '#6a8aa0'], o: { deep: 1.2, snout: 1 },
     fact: 'A whale-sized ichthyosaur. These marine reptiles looked like dolphins but were neither dinosaurs nor fish.' }),
-  W('ichthyosaurus', 'Ichthyosaurus', 'ichthyo', 2.5, [200, 190], { where: 'England', means: 'fish lizard', diet: 'fish eater', mass: 90,
+  W('ichthyosaurus', 'Ichthyosaurus', 'ichthyo', 2.5, [200, 190], { niche: 'fish', where: 'England', means: 'fish lizard', diet: 'fish eater', mass: 90,
     c: ['#2e3e4e', '#d2dce0', '#1a2632', '#5a7a90'], o: { deep: 1, snout: 1.2 },
-    fact: 'Mary Anning and her brother found the first complete one in 1811, when she was twelve. They gave birth to live young at sea.' }),
-  W('plesiosaurus', 'Plesiosaurus', 'plesio', 3.5, [199, 190], { where: 'England', means: 'near lizard', diet: 'fish eater', mass: 450,
+    fact: 'Mary Anning, aged about twelve, and her brother Joseph dug up the first ichthyosaur to catch scientists’ attention in 1811–12 (a larger cousin, Temnodontosaurus). Ichthyosaurs gave birth to live young at sea.' }),
+  W('plesiosaurus', 'Plesiosaurus', 'plesio', 3.5, [199, 190], { niche: 'neck', where: 'England', means: 'near lizard', diet: 'fish eater', mass: 450,
     c: ['#4a5a4a', '#d6dcc8', '#2c3a2c', '#8a9a6a'], o: { neck: .9 },
     fact: 'Four flippers and a long neck: it “flew” under water like a penguin. Mary Anning found the first skeleton in 1823.' }),
-  W('ophthalmosaurus', 'Ophthalmosaurus', 'ichthyo', 5, [165, 150], { where: 'England, Argentina', means: 'eye lizard', diet: 'squid eater', mass: 900,
+  W('ophthalmosaurus', 'Ophthalmosaurus', 'ichthyo', 4, [165, 157], { niche: 'fish', where: 'England, France', means: 'eye lizard', diet: 'squid eater', mass: 900,
     c: ['#33404a', '#cfd6da', '#1e2830', '#587088'], o: { deep: 1.1, snout: 1, eye: 1.8 },
     fact: 'Its eyes were 22 cm across, the largest for its size of any vertebrate, for hunting squid in the dark.' }),
-  W('liopleurodon', 'Liopleurodon', 'plio', 6.5, [166, 155], { where: 'England, France', means: 'smooth-sided tooth', diet: 'carnivore', mass: 1700,
+  W('liopleurodon', 'Liopleurodon', 'plio', 6.5, [166, 155], { niche: 'apex', where: 'England, France', means: 'smooth-sided tooth', diet: 'carnivore', mass: 1700,
     c: ['#2a3a4a', '#d0d8dc', '#16222e', '#4a6a8a'], o: {},
     fact: 'A short-necked pliosaur with a 1.5 m skull, the top hunter of the Jurassic seas of Europe.' }),
-  W('kronosaurus', 'Kronosaurus', 'plio', 10, [125, 100], { where: 'Queensland, Australia', means: 'lizard of Kronos', diet: 'carnivore', mass: 11000,
+  W('kronosaurus', 'Kronosaurus', 'plio', 10, [125, 100], { niche: 'apex', where: 'Queensland, Australia', means: 'lizard of Kronos', diet: 'carnivore', mass: 11000,
     c: ['#3a3e3a', '#d0d2c8', '#202420', '#6a7a5a'], o: {},
     fact: 'A pliosaur with a skull over 2 m long and teeth the size of bananas. It ate turtles and other plesiosaurs.' }),
-  W('elasmosaurus', 'Elasmosaurus', 'plesio', 10.3, [80.5, 77], { where: 'Kansas, USA', means: 'thin-plate lizard', diet: 'fish eater', mass: 2000,
+  W('elasmosaurus', 'Elasmosaurus', 'plesio', 10.3, [80.5, 77], { niche: 'neck', where: 'Kansas, USA', means: 'thin-plate lizard', diet: 'fish eater', mass: 2000,
     c: ['#4a5a66', '#d8e0e4', '#2c3840', '#7a90a0'], o: { neck: 1.7 },
     fact: 'Its neck had 72 vertebrae and was longer than the rest of its body. The first reconstruction put the head on the tail.' }),
-  W('mosasaurus', 'Mosasaurus', 'mosa', 13, [70, 66], { where: 'Netherlands, worldwide', means: 'Meuse lizard', diet: 'carnivore', mass: 10000,
+  W('mosasaurus', 'Mosasaurus', 'mosa', 13, [82, 66], { niche: 'apex', where: 'Netherlands, worldwide', means: 'Meuse lizard', diet: 'carnivore', mass: 10000,
     c: ['#2e3a44', '#c8d0d4', '#182028', '#55708a'], o: {},
-    fact: 'A sea-going relative of monitor lizards and snakes with a shark-like tail. Its skull, found in 1764, started the science of extinction.' }),
+    fact: 'A sea-going relative of monitor lizards and snakes with a shark-like tail. The first skull was found in 1764; Cuvier later showed it was a giant extinct sea lizard, which helped prove that species can die out.' }),
 ];
 
 export const SPECIES = [...RAW, ...FLY, ...SWIM];
@@ -334,6 +334,7 @@ for (const s of SPECIES) {
   if (s.id === 'psittacosaurus') s.group = 'ceratopsian';
   if (s.id === 'heterodontosaurus') s.group = 'ornithischian';
   if (s.id === 'scelidosaurus') s.group = 'thyreophoran';
+  if (s.id === 'eoraptor') s.group = 'early saurischian';      // most studies now put it with the sauropod line
   s.dino = s.kind === 'walk' || s.plan === 'pbird';     // pterosaurs and marine reptiles are not dinosaurs
 }
 const BY_ID = new Map(SPECIES.map(s => [s.id, s]));
@@ -350,7 +351,7 @@ export const SWIMMERS = SPECIES.filter(s => s.kind === 'swim');
 
 // was this species alive `ma` million years ago? (slack widens the range a little: the fossil record is patchy)
 const birdy = s => s.plan === 'bird' || s.plan === 'pbird';
-export const alive = (s, ma, slack = 2) => ma <= s.ma[0] + slack && ma >= s.ma[1] - slack && (ma >= 66 || birdy(s));
+export const alive = (s, ma, slack = 3.5) => ma <= s.ma[0] + slack && ma >= s.ma[1] - slack && (ma >= 66 || birdy(s));
 const gap = (s, ma) => ma > s.ma[0] ? ma - s.ma[0] : ma < s.ma[1] ? s.ma[1] - ma : 0;
 
 // Who plays this species' part at another time. If `sp` was alive at `ma` it plays itself; otherwise the nearest
@@ -359,6 +360,7 @@ const gap = (s, ma) => ma > s.ma[0] ? ma - s.ma[0] : ma < s.ma[1] ? s.ma[1] - ma
 export function standIn(sp, ma) {
   sp = species(sp);
   if (alive(sp, ma)) return sp;
+  if (sp.kind === 'fly' && ma > 228) return null;     // nothing with a backbone flew before the first pterosaurs
   const pool = SPECIES.filter(s => s.kind === sp.kind && (ma >= 66 || birdy(s)));
   if (!pool.length) return null;                       // e.g. pterosaurs and marine reptiles after the impact
   let best = null, score = 1e9;

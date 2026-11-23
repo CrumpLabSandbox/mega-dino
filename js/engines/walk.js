@@ -42,7 +42,7 @@ export const scenes = [
   S('stego', 'Stegosaurus in the Conifers', 'Plates and spikes among the araucarias of the Morrison.', ['stegosaur', 'jurassic', 'forest'],
     { cast: [{ sp: 'stegosaurus', n: 2, young: 1 }], biome: 'forest', mode: 'wander', seed: 8 }, { stage: 0.43 }),
   S('raptors', 'Velociraptors at Dusk', 'Turkey-sized, feathered and quick, over the dunes of the Gobi.', ['theropod', 'cretaceous', 'desert', 'pack'],
-    { cast: [{ sp: 'velociraptor', n: 5 }], biome: 'desert', seed: 21 }, { stage: 0.79, light: 0.3, activity: 0.7 }),
+    { cast: [{ sp: 'velociraptor', n: 5 }], biome: 'desert', seed: 21 }, { stage: 0.805, light: 0.3, activity: 0.7 }),
   S('hunt', 'Allosaurus and Stegosaurus', 'A hunter tests a herd that can fight back. Watch the standoff.', ['theropod', 'stegosaur', 'jurassic', 'hunt'],
     { cast: [{ sp: 'stegosaurus', n: 3, young: 1 }, { sp: 'allosaurus', n: 1, role: 'pred' }], mode: 'hunt', biome: 'plain', seed: 14 }, { stage: 0.43, activity: 0.6 }),
   S('chase', 'Gallimimus Run', 'A flock of ostrich mimics bolts from a tyrannosaur.', ['theropod', 'cretaceous', 'hunt', 'herd'],

@@ -260,7 +260,9 @@ function renderSlot(s, sdt, clock, outgoing) {
   sizeSlot(s);
   s.t += sdt;
   const p = s === cur ? params : (s.params ||= defaultsFor(s.engine, s.scene));
-  s.life += sdt * growRate(p.grow);
+  // time travel slows to a quarter through the impact, so the fireball, flash and dark can be watched
+  const at = stageOf(s, p).stage;
+  s.life += sdt * growRate(p.grow) * (at > 0.866 && at < 0.93 ? 0.25 : 1);
   const { stage, epoch } = stageOf(s, p);
   const sky = hasSky(s), behind = volOn() && sky;
   const transparentSky = sky && (behind || (comboOn() && ['sky', 'mist'].includes(comboMode(s))));

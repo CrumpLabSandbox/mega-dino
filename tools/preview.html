@@ -13,6 +13,8 @@ import { loadAll, defaultsFor } from '../js/registry.js';
 import { era } from '../js/time.js';
 const q = new URLSearchParams(location.search);
 const W = +(q.get('w') || 480), H = +(q.get('h') || 270), T0 = +(q.get('t') || 12), FR = +(q.get('frames') || 20);
+// show the canvases at their real size, so w=960&h=540 gives a close look
+if (W !== 480) document.head.append(Object.assign(document.createElement('style'), { textContent: `#g{grid-template-columns:repeat(auto-fill,${W}px)}canvas{width:${W}px;height:${H}px}` }));
 const BACK = q.get('backdrop') === '1', COMBO = q.get('combo') === '1' || BACK;
 window.__errors = [];
 addEventListener('error', e => window.__errors.push(String(e.message)));

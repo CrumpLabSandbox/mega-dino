@@ -80,12 +80,14 @@ export function skyGradient(ctx, w, h, light, top, bottom) {
   const g = ctx.createLinearGradient(0, 0, 0, h);
   if (top && bottom) { g.addColorStop(0, top); g.addColorStop(1, bottom); }
   else {
-    const day = clamp(light);
-    const dusk = Math.max(0, 1 - Math.abs(day - 0.3) / 0.2);
-    const tl = lerp(6, 55, day), bl = lerp(10, 82, day);
-    g.addColorStop(0, hsl(lerp(230, 210, day), lerp(50, 70, day), tl));
-    g.addColorStop(0.7, hsl(lerp(220, 200, day) - dusk * 180, lerp(40, 60, day) + dusk * 30, lerp(tl, bl, 0.7) + dusk * 10));
-    g.addColorStop(1, hsl(lerp(210, 195, day) - dusk * 175, lerp(40, 50, day) + dusk * 40, bl + dusk * 5));
+    // blended in RGB (a hue blend between blue and orange would pass through green)
+    const day = clamp(light), dusk = Math.max(0, 1 - Math.abs(day - 0.3) / 0.22), k = smooth(0.02, 0.6, day);
+    const mix3 = (a, b, t) => `rgb(${lerp(a[0], b[0], t) | 0},${lerp(a[1], b[1], t) | 0},${lerp(a[2], b[2], t) | 0})`;
+    const m = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)];
+    const top = m([8, 12, 32], [58, 118, 204], k), mid = m([16, 22, 52], [128, 178, 228], k), low = m([24, 30, 60], [198, 222, 240], k);
+    g.addColorStop(0, mix3(top, [58, 52, 104], dusk * 0.5));
+    g.addColorStop(0.7, mix3(mid, [226, 138, 104], dusk * 0.7));
+    g.addColorStop(1, mix3(low, [250, 186, 110], dusk * 0.9));
   }
   ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
 }

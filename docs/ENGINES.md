@@ -61,7 +61,7 @@ Every scene sits somewhere in the same story: the age of dinosaurs. The host tur
 `name`, `span`, `text`. `f.epoch` counts completed loops. `maOf(stage)` and `stageOfMa(ma)` convert.
 
 Scenes set their era with `params.stage`. Handy values: Late Triassic 0.08 · Early Jurassic 0.2 · Late Jurassic
-(Morrison: Allosaurus, Stegosaurus, Diplodocus) 0.42 · Early Cretaceous 0.56 · Spinosaurus 0.71 · Velociraptor 0.79 ·
+(Morrison: Allosaurus, Stegosaurus, Diplodocus) 0.42 · Early Cretaceous 0.56 · Spinosaurus 0.71 · Velociraptor 0.8 ·
 T. rex and Triceratops 0.855 · just before the impact 0.865 · impact winter 0.9 · after 0.97. A scene that should run
 through time by itself sets `grow` (0.5 ≈ a loop every two minutes); the default is 0 (stay put).
 
@@ -80,7 +80,7 @@ alive; `standIn(sp, ma)` recasts for another time. Fields: `id`, `name`, `kind` 
 display]`), `pat`, `f` (features: plates, frill, sail, crest…), `dino` (false for pterosaurs and marine reptiles: they
 were **not** dinosaurs, so never label them as such), `known: 'colour'` when the colouring is from fossil pigment.
 
-Walkers (56): eoraptor herrerasaurus coelophysis plateosaurus · dilophosaurus scelidosaurus cryolophosaurus
+Walkers (61): eoraptor herrerasaurus coelophysis plateosaurus · dilophosaurus scelidosaurus cryolophosaurus
 heterodontosaurus massospondylus megalosaurus shunosaurus huayangosaurus · allosaurus stegosaurus diplodocus apatosaurus
 brachiosaurus camarasaurus ceratosaurus compsognathus archaeopteryx kentrosaurus mamenchisaurus · iguanodon utahraptor
 deinonychus baryonyx psittacosaurus amargasaurus ouranosaurus acrocanthosaurus microraptor yutyrannus sauroposeidon
@@ -159,7 +159,7 @@ height: where the horizon and the main animals' feet sit; defaults 0.56 and 0.85
   feed stalk`), or `{ type: 'plant', kind, seed, x, y, k, sway, fog, parts }`.
 - `v.far`: silhouette layers on the horizon (`pts`, `tone`, `kind`), `v.sea` (coast), `v.flyers` (items with
   `type: 'flyer'`), `v.sun` (`x y r night dusk moon`), `v.meteor` (`x y r ang len hit` or null), `v.flash`, `v.dark`,
-  `v.light` (the Light control, dimmed by the impact winter), `v.horizon`, `v.k0` (pixels per metre at the stage),
+  `v.light` (the Light control, dimmed by the impact winter), `v.horizon`, `v.k0` (pixels per metre at the stage), `v.d0` (the stage's depth in metres),
   `v.sx(x, d)`, `v.sy(x, d, y)`, `v.actors`, `v.lead`, `v.hunt` (phase), `v.biome`, `v.wind`.
 
 `paintWorld(f, v, S)` (`js/draw.js`) paints all of that in order and lets you replace any step: `S.sky S.sun S.flyer
