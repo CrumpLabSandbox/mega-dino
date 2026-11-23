@@ -3,8 +3,121 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mega-dino</title>
-<style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:system-ui,sans-serif;background:#0f172a;color:#e2e8f0}</style>
+<title>Mega-Dino</title>
+<meta name="description" content="A dinosaur simulator: herds, families and hunters walking through the Mesozoic, from the first dinosaurs to the asteroid, in over a hundred styles. Put any Mega-Volcano behind them and any Mega-Clouds sky above.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M2 40c10-2 16-10 26-10 4 0 6 2 8 4l4-14c1-5 6-8 12-7l8 3-2 5-10 1-3 14c-1 8-6 12-13 12l1 10h-5l-2-9-6-1-2 10h-5l1-12c-4-2-8-4-12-6z' fill='%23a6d95c'/%3E%3Ccircle cx='51' cy='17' r='1.6' fill='%23122'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="css/style.css">
 </head>
-<body><h1>mega-dino</h1></body>
+<body>
+<canvas id="out" aria-label="Dinosaur animation"></canvas>
+
+<section id="gallery" hidden>
+  <header class="g-head">
+    <h1><span class="logo">🦕</span> Mega-Dino</h1>
+    <p class="sub"><span id="count">…</span> dinosaur simulations: herds, families and hunters walking through 180 million years, from the first dinosaurs to the asteroid. Pick one, or press <kbd>Shuffle</kbd> for a screensaver.</p>
+    <div class="g-tools">
+      <input id="search" type="search" placeholder="Search dinosaurs…" aria-label="Search scenes">
+      <button id="g-shuffle" class="pill accent">▶ Shuffle all</button>
+      <span class="combo-tools">
+        <label class="g-layer need-volcano" title="Put a Mega-Volcano scene behind every scene you open">🌋
+          <select id="g-volcano" aria-label="Volcano"><option value="">No volcano</option><option value="random">Random volcano</option></select>
+        </label>
+        <label class="g-layer need-clouds" title="Put a Mega-Clouds sky over every scene you open">☁
+          <select id="g-clouds" aria-label="Clouds"><option value="">No clouds</option><option value="random">Random clouds</option></select>
+        </label>
+        <button id="g-combo" class="pill accent2" title="Random dinosaurs + random volcano + random clouds, changing every 30 s">▶ Dinosaurs + volcano + clouds</button>
+        <a class="pill" href="mix.html" title="Roll random combinations of dinosaurs, volcano and clouds; lock the ones you like, reroll the rest">🎲 Mix &amp; match</a>
+      </span>
+    </div>
+    <nav id="chips" aria-label="Filter by tag"></nav>
+  </header>
+  <div id="grid"></div>
+  <footer class="g-foot">
+    Drag to look around · click an animal to make it call · <kbd>←</kbd><kbd>→</kbd> change scene · <kbd>↑</kbd><kbd>↓</kbd> change clouds · <kbd>[</kbd><kbd>]</kbd> change volcano · <kbd>K</kbd> clouds on/off · <kbd>L</kbd> volcano on/off ·
+    <kbd>Space</kbd> pause · <kbd>I</kbd> era captions · <kbd>F</kbd> full screen · <kbd>H</kbd> hide controls.
+    Embed as a clean video source with <code>?scene=&lt;id&gt;&amp;ui=0</code>, add layers with <code>&amp;volcano=&lt;id&gt;&amp;clouds=&lt;id&gt;</code>.
+    Skies come from <a id="clouds-site" href="https://crumplabsandbox.github.io/Mega-Clouds/">Mega-Clouds</a>, volcanoes from <a id="volcano-site" href="https://crumplabsandbox.github.io/mega-volcano/">Mega-Volcano</a>.
+    What is known and what is guessed: <a href="https://github.com/CrumpLabSandbox/mega-dino/blob/main/docs/SCIENCE.md">the science</a> · <a href="https://github.com/CrumpLabSandbox/mega-dino">Source</a>
+  </footer>
+</section>
+
+<section id="hud" hidden>
+  <div class="bar top">
+    <button id="b-gallery" class="pill" title="All scenes (G)">☰ Gallery</button>
+    <button id="b-prev" class="icon" title="Previous (←)">‹</button>
+    <div class="title"><strong><span id="s-name"></span><span id="s-volcano"></span><span id="s-clouds"></span></strong><span id="s-engine"></span></div>
+    <button id="b-next" class="icon" title="Next (→)">›</button>
+    <span class="grow"></span>
+    <label class="shuffle" title="Screensaver: change scene every…">⟳
+      <select id="b-shuffle">
+        <option value="0">Shuffle off</option><option value="15">every 15 s</option><option value="30">every 30 s</option>
+        <option value="60">every 1 min</option><option value="120">every 2 min</option><option value="300">every 5 min</option>
+      </select>
+    </label>
+    <button id="b-pause" class="icon" title="Pause (Space)">❚❚</button>
+    <button id="b-random" class="icon" title="Random scene (R)">⚄</button>
+    <button id="b-volcano" class="icon need-volcano" title="A volcano from Mega-Volcano behind the dinosaurs (L)">🌋</button>
+    <button id="b-clouds" class="icon need-clouds" title="A sky from Mega-Clouds (K)">☁</button>
+    <button id="b-cap" class="icon" title="Era captions (I)">ⓘ</button>
+    <button id="b-panel" class="icon" title="Controls (C)">⚙</button>
+    <span id="hands-slot"></span>
+    <button id="b-snap" class="icon" title="Save a PNG (S)">◉</button>
+    <button id="b-rec" class="icon" title="Record video (V)">⏺</button>
+    <button id="b-link" class="icon" title="Copy a link to this exact view">🔗</button>
+    <button id="b-full" class="icon" title="Full screen (F)">⛶</button>
+  </div>
+  <aside id="panel" hidden>
+    <p id="s-desc"></p>
+    <h3>Dinosaurs</h3><div id="ctl-main"></div>
+    <h3 id="h-extra">This scene</h3><div id="ctl-extra"></div>
+    <section id="volcano-sec" class="need-volcano">
+      <h3 id="h-volcano">Volcano</h3>
+      <div class="row"><label for="c-volcano">Backdrop</label><select id="c-volcano"><option value="">No volcano</option><option value="random">Random volcano</option></select></div>
+      <div id="volcano-extra" hidden>
+        <div id="volcano-sliders"></div>
+        <div class="row"><label for="c-vlink" title="The volcano follows the scene's Light, Wind and Speed">Follow</label><span class="check"><input type="checkbox" id="c-vlink" checked> light, wind, speed</span></div>
+        <div class="btns"><button id="c-vnext" class="pill">Next volcano</button><button id="c-vfree" class="pill" title="Let the island run its own life cycle and eruptions again">Run free</button></div>
+      </div>
+    </section>
+    <section id="cloud-sec" class="need-clouds">
+      <h3>Clouds</h3>
+      <div class="row"><label for="c-clouds">Sky</label><select id="c-clouds"><option value="">No clouds</option><option value="random">Random clouds</option></select></div>
+      <div id="cloud-extra" hidden>
+        <div class="row"><label for="c-cmode" title="How the clouds and the picture are layered">Layering</label>
+          <select id="c-cmode">
+            <option value="auto">Auto</option>
+            <option value="sky">Sky: clouds behind</option>
+            <option value="mist">Mist: behind and in front</option>
+            <option value="over">Over: clouds on top</option>
+            <option value="screen">Screen: blend</option>
+          </select></div>
+        <div id="cloud-sliders"></div>
+        <div class="row"><label for="c-clink" title="Clouds follow the scene's Light, Wind and Speed">Follow</label><span class="check"><input type="checkbox" id="c-clink" checked> light, wind, speed</span></div>
+        <div class="btns"><button id="c-cnext" class="pill">Next clouds</button></div>
+      </div>
+    </section>
+    <div class="row need-clouds"><label for="c-cshuffle" title="What the screensaver changes when layers are on">Shuffle</label>
+      <select id="c-cshuffle"><option value="all">changes everything</option><option value="dino">changes the dinosaurs</option><option value="layers">changes volcano and clouds</option></select></div>
+    <h3>Look</h3><div id="ctl-look"></div>
+    <h3>Output</h3>
+    <div class="row"><label for="quality">Quality</label>
+      <select id="quality"><option value="auto">Auto</option><option value="0.5">Low</option><option value="0.75">Medium</option><option value="1">High</option><option value="1.5">Ultra</option></select></div>
+    <div class="row"><label for="fade">Crossfade</label>
+      <select id="fade"><option value="0">Cut</option><option value="1.5" selected>1.5 s</option><option value="4">4 s</option></select></div>
+    <div class="btns"><button id="b-reset" class="pill">Reset scene</button><button id="b-dice" class="pill">Randomise</button></div>
+    <p id="fps" class="muted"></p>
+  </aside>
+  <div id="toast" role="status" aria-live="polite"></div>
+</section>
+
+<div id="stage" hidden aria-live="polite">
+  <div class="st-bar"><i id="stage-bar"></i></div>
+  <strong><span id="stage-name"></span><small id="stage-ma" aria-live="off"></small></strong>
+  <span id="stage-text"></span>
+</div>
+
+<div id="err" hidden></div>
+<script src="js/vendor/invisible-hands.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
 </html>

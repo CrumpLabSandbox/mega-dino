@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8"><title>lineup</title>
+<style>body{margin:0;background:#cfd6da;font:11px system-ui}canvas{display:block}</style>
+<canvas id="c"></canvas>
+<script type="module">
+// Every walking species in one sheet, to check the rig: tools/lineup.html?[bones=1][&run=1][&headTo=-1][&jaw=1][&only=id,id][&phase=0.3]
+import { WALKERS, species } from '../js/species.js';
+import { pose, parts, bones, size } from '../js/rig.js';
+import { drawParts, palette } from '../js/draw.js';
+const q = new URLSearchParams(location.search);
+const list = q.get('only') ? q.get('only').split(',').map(species) : WALKERS;
+const cols = +(q.get('cols') || 6), cw = 300, ch = 200, rows = Math.ceil(list.length / cols);
+c.width = cols * cw; c.height = rows * ch;
+const g = c.getContext('2d');
+list.forEach((sp, i) => {
+  const x0 = (i % cols) * cw, y0 = Math.floor(i / cols) * ch, sz = size(sp);
+  const k = Math.min((cw - 20) / (sp.len * 1.05), (ch - 40) / (sz.tall * 1.15));
+  g.fillStyle = '#b9c4c9'; g.fillRect(x0, y0 + ch - 22, cw, 22);
+  const p = pose(sp, { phase: +(q.get('phase') ?? 0.15 + i * 0.07), run: +(q.get('run') || 0), headTo: +(q.get('headTo') || 0), jaw: +(q.get('jaw') || 0), crouch: +(q.get('crouch') || 0), rear: +(q.get('rear') || 0), t: i });
+  let minx = 1e9, maxx = -1e9; for (const n of p.nodes) { minx = Math.min(minx, n.x); maxx = Math.max(maxx, n.x); } maxx = Math.max(maxx, p.head.x + p.head.len);
+  const T = { x: x0 + cw / 2 - (minx + maxx) / 2 * k, y: y0 + ch - 22, k, dir: 1 };
+  if (q.get('bones')) drawParts(g, bones(p), T, { pal: { bone: '#f4ecd6', boneFar: '#a9a08a', hole: '#2a2a2a' }, stroke: '#2a2a2a', lw: 0.6, pupil: false });
+  else drawParts(g, parts(p), T, { pal: palette(sp), stroke: 'rgba(0,0,0,.45)', lw: 0.7 });
+  g.fillStyle = '#222'; g.fillText(`${sp.name} · ${sp.len} m`, x0 + 6, y0 + 12);
+});
+window.__done = 1;
+</script>
